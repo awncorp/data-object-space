@@ -22,8 +22,8 @@ fi
 dzil clean
 
 # Delete existing release tag (if exists)
-git tag -d cpan $V 2> /dev/null
-git push origin :refs/tags/cpan :refs/tags/$V 2> /dev/null
+git tag -d latest $V 2> /dev/null
+git push origin :refs/tags/latest :refs/tags/$V 2> /dev/null
 
 # Persist Release VERSION
 echo $V > VERSION
@@ -43,7 +43,7 @@ fi
 dzil release
 
 # Tag as CPAN for releasing
-git tag cpan 2> /dev/null
+git tag latest 2> /dev/null
 
 # Re-push all tags (just in case)
 git push --tags 2> /dev/null
