@@ -36,7 +36,7 @@ METHODS
       
         $space->append('baz');
       
-        # bless(do{\(my $o = 'Foo/Bar/Baz')}, 'Data::Object::Space')
+        # 'Foo/Bar/Baz'
 
     append example #2
 
@@ -46,7 +46,7 @@ METHODS
       
         # $space->package;
       
-        # bless(do{\(my $o = 'Foo/Bar/Baz/Bax')}, 'Data::Object::Space')
+        # 'Foo/Bar/Baz/Bax'
 
  array
 
@@ -207,7 +207,7 @@ METHODS
       
         use Data::Object::Space;
       
-        my $space = Data::Object::Space->new('foo');
+        $space = Data::Object::Space->new('foo');
       
         $space->call('start')
       
@@ -232,7 +232,7 @@ METHODS
 
  children
 
-      children() : ArrayRef
+      children() : ArrayRef[Object]
 
     The children method searches %INC and @INC and retuns a list of
     Data::Object::Space objects for each child namespace found (one level
@@ -249,9 +249,9 @@ METHODS
         $space->children
       
         # [
-        #   bless(do{\(my $o = 'CPAN/Author')}, 'Data::Object::Space'),
-        #   bless(do{\(my $o = 'CPAN/Bundle')}, 'Data::Object::Space'),
-        #   bless(do{\(my $o = 'CPAN/CacheMgr')}, 'Data::Object::Space'),
+        #   'CPAN/Author',
+        #   'CPAN/Bundle',
+        #   'CPAN/CacheMgr',
         #   ...
         # ]
 
@@ -278,7 +278,7 @@ METHODS
       
         use Data::Object::Space;
       
-        my $space = Data::Object::Space->new('foo/bar');
+        $space = Data::Object::Space->new('foo/bar');
       
         $space->cop('handler', $space->bless)
       
@@ -548,7 +548,7 @@ METHODS
       
         $space->prepend('etc');
       
-        # bless(do{\(my $o = 'Etc/Foo/Bar')}, 'Data::Object::Space')
+        # 'Etc/Foo/Bar'
 
     prepend example #2
 
@@ -556,7 +556,7 @@ METHODS
       
         $space->prepend('etc', 'tmp');
       
-        # bless(do{\(my $o = 'Etc/Tmp/Foo/Bar')}, 'Data::Object::Space')
+        # 'Etc/Tmp/Foo/Bar'
 
  root
 
@@ -585,7 +585,7 @@ METHODS
 
         package Foo;
       
-        sub start {
+        sub cont {
           [@_]
         }
       
@@ -599,7 +599,7 @@ METHODS
       
         my $space = Data::Object::Space->new('foo');
       
-        $space->routine('start')
+        $space->routine('cont')
       
         # sub { ... }
 
@@ -693,7 +693,7 @@ METHODS
 
  siblings
 
-      siblings() : ArrayRef
+      siblings() : ArrayRef[Object]
 
     The siblings method searches %INC and @INC and retuns a list of
     Data::Object::Space objects for each sibling namespace found (one level
@@ -710,8 +710,8 @@ METHODS
         $space->siblings
       
         # [
-        #   bless(do{\(my $o = 'Encode/Alias')}, 'Data::Object::Space'),
-        #   bless(do{\(my $o = 'Encode/Config')}, 'Data::Object::Space'),
+        #   'Encode/Alias',
+        #   'Encode/Config'
         #   ...
         # ]
 

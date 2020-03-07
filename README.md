@@ -35,7 +35,7 @@ parts.
 
         $space->append('baz');
 
-        # bless(do{\(my $o = 'Foo/Bar/Baz')}, 'Data::Object::Space')
+        # 'Foo/Bar/Baz'
 
 - append example #2
 
@@ -45,7 +45,7 @@ parts.
 
         # $space->package;
 
-        # bless(do{\(my $o = 'Foo/Bar/Baz/Bax')}, 'Data::Object::Space')
+        # 'Foo/Bar/Baz/Bax'
 
 ## array
 
@@ -203,7 +203,7 @@ and if successful returns the resulting value.
 
         use Data::Object::Space;
 
-        my $space = Data::Object::Space->new('foo');
+        $space = Data::Object::Space->new('foo');
 
         $space->call('start')
 
@@ -228,7 +228,7 @@ package namespace.
 
 ## children
 
-    children() : ArrayRef
+    children() : ArrayRef[Object]
 
 The children method searches `%INC` and `@INC` and retuns a list of
 [Data::Object::Space](https://metacpan.org/pod/Data%3A%3AObject%3A%3ASpace) objects for each child namespace found (one level deep).
@@ -244,9 +244,9 @@ The children method searches `%INC` and `@INC` and retuns a list of
         $space->children
 
         # [
-        #   bless(do{\(my $o = 'CPAN/Author')}, 'Data::Object::Space'),
-        #   bless(do{\(my $o = 'CPAN/Bundle')}, 'Data::Object::Space'),
-        #   bless(do{\(my $o = 'CPAN/CacheMgr')}, 'Data::Object::Space'),
+        #   'CPAN/Author',
+        #   'CPAN/Bundle',
+        #   'CPAN/CacheMgr',
         #   ...
         # ]
 
@@ -273,7 +273,7 @@ and if successful returns a closure.
 
         use Data::Object::Space;
 
-        my $space = Data::Object::Space->new('foo/bar');
+        $space = Data::Object::Space->new('foo/bar');
 
         $space->cop('handler', $space->bless)
 
@@ -540,7 +540,7 @@ parts.
 
         $space->prepend('etc');
 
-        # bless(do{\(my $o = 'Etc/Foo/Bar')}, 'Data::Object::Space')
+        # 'Etc/Foo/Bar'
 
 - prepend example #2
 
@@ -548,7 +548,7 @@ parts.
 
         $space->prepend('etc', 'tmp');
 
-        # bless(do{\(my $o = 'Etc/Tmp/Foo/Bar')}, 'Data::Object::Space')
+        # 'Etc/Tmp/Foo/Bar'
 
 ## root
 
@@ -577,7 +577,7 @@ name.
 
         package Foo;
 
-        sub start {
+        sub cont {
           [@_]
         }
 
@@ -591,7 +591,7 @@ name.
 
         my $space = Data::Object::Space->new('foo');
 
-        $space->routine('start')
+        $space->routine('cont')
 
         # sub { ... }
 
@@ -684,7 +684,7 @@ package namespace.
 
 ## siblings
 
-    siblings() : ArrayRef
+    siblings() : ArrayRef[Object]
 
 The siblings method searches `%INC` and `@INC` and retuns a list of
 [Data::Object::Space](https://metacpan.org/pod/Data%3A%3AObject%3A%3ASpace) objects for each sibling namespace found (one level
@@ -701,8 +701,8 @@ deep).
         $space->siblings
 
         # [
-        #   bless(do{\(my $o = 'Encode/Alias')}, 'Data::Object::Space'),
-        #   bless(do{\(my $o = 'Encode/Config')}, 'Data::Object::Space'),
+        #   'Encode/Alias',
+        #   'Encode/Config'
         #   ...
         # ]
 
