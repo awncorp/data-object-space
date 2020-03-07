@@ -50,7 +50,7 @@ parts.
 
   $space->append('baz');
 
-  # bless(do{\(my $o = 'Foo/Bar/Baz')}, 'Data::Object::Space')
+  # 'Foo/Bar/Baz'
 
 =back
 
@@ -64,7 +64,7 @@ parts.
 
   # $space->package;
 
-  # bless(do{\(my $o = 'Foo/Bar/Baz/Bax')}, 'Data::Object::Space')
+  # 'Foo/Bar/Baz/Bax'
 
 =back
 
@@ -266,7 +266,7 @@ and if successful returns the resulting value.
 
   use Data::Object::Space;
 
-  my $space = Data::Object::Space->new('foo');
+  $space = Data::Object::Space->new('foo');
 
   $space->call('start')
 
@@ -301,7 +301,7 @@ package namespace.
 
 =head2 children
 
-  children() : ArrayRef
+  children() : ArrayRef[Object]
 
 The children method searches C<%INC> and C<@INC> and retuns a list of
 L<Data::Object::Space> objects for each child namespace found (one level deep).
@@ -319,9 +319,9 @@ L<Data::Object::Space> objects for each child namespace found (one level deep).
   $space->children
 
   # [
-  #   bless(do{\(my $o = 'CPAN/Author')}, 'Data::Object::Space'),
-  #   bless(do{\(my $o = 'CPAN/Bundle')}, 'Data::Object::Space'),
-  #   bless(do{\(my $o = 'CPAN/CacheMgr')}, 'Data::Object::Space'),
+  #   'CPAN/Author',
+  #   'CPAN/Bundle',
+  #   'CPAN/CacheMgr',
   #   ...
   # ]
 
@@ -354,7 +354,7 @@ and if successful returns a closure.
 
   use Data::Object::Space;
 
-  my $space = Data::Object::Space->new('foo/bar');
+  $space = Data::Object::Space->new('foo/bar');
 
   $space->cop('handler', $space->bless)
 
@@ -711,7 +711,7 @@ parts.
 
   $space->prepend('etc');
 
-  # bless(do{\(my $o = 'Etc/Foo/Bar')}, 'Data::Object::Space')
+  # 'Etc/Foo/Bar'
 
 =back
 
@@ -723,7 +723,7 @@ parts.
 
   $space->prepend('etc', 'tmp');
 
-  # bless(do{\(my $o = 'Etc/Tmp/Foo/Bar')}, 'Data::Object::Space')
+  # 'Etc/Tmp/Foo/Bar'
 
 =back
 
@@ -764,7 +764,7 @@ name.
 
   package Foo;
 
-  sub start {
+  sub cont {
     [@_]
   }
 
@@ -778,7 +778,7 @@ name.
 
   my $space = Data::Object::Space->new('foo');
 
-  $space->routine('start')
+  $space->routine('cont')
 
   # sub { ... }
 
@@ -899,7 +899,7 @@ package namespace.
 
 =head2 siblings
 
-  siblings() : ArrayRef
+  siblings() : ArrayRef[Object]
 
 The siblings method searches C<%INC> and C<@INC> and retuns a list of
 L<Data::Object::Space> objects for each sibling namespace found (one level
@@ -918,8 +918,8 @@ deep).
   $space->siblings
 
   # [
-  #   bless(do{\(my $o = 'Encode/Alias')}, 'Data::Object::Space'),
-  #   bless(do{\(my $o = 'Encode/Config')}, 'Data::Object::Space'),
+  #   'Encode/Alias',
+  #   'Encode/Config'
   #   ...
   # ]
 
