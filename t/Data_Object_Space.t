@@ -54,6 +54,18 @@ method: variables
 
 =cut
 
+=inherits
+
+Data::Object::Name
+
+=cut
+
+=libraries
+
+Types::Standard
+
+=cut
+
 =synopsis
 
   package main;
