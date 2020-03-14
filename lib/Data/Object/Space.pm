@@ -222,7 +222,7 @@ method load() {
   do {
     require Carp;
 
-    my $message = lc $error || "cause unknown";
+    my $message = $error || "cause unknown";
 
     Carp::confess "Error attempting to load $class: $message";
   }
