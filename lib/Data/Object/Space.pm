@@ -192,6 +192,11 @@ method id() {
   return $self->label;
 }
 
+method inherits() {
+
+  return $self->array('ISA');
+}
+
 my $loaded_spaces = {};
 
 method load() {

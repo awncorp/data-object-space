@@ -35,6 +35,7 @@ method: functions
 method: hash
 method: hashes
 method: id
+method: inherits
 method: load
 method: methods
 method: name
@@ -483,6 +484,45 @@ id() : Str
   $space->id
 
   # Foo_Bar
+
+=cut
+
+=method inherits
+
+The inherits method returns the list of superclasses the target package is
+derived from.
+
+=signature inherits
+
+inherits() : ArrayRef
+
+=example-1 inherits
+
+  package Bar;
+
+  package main;
+
+  my $space = Data::Object::Space->new('bar');
+
+  $space->inherits
+
+  # []
+
+=example-2 inherits
+
+  package Foo;
+
+  package Bar;
+
+  use base 'Foo';
+
+  package main;
+
+  my $space = Data::Object::Space->new('bar');
+
+  $space->inherits
+
+  # ['Foo']
 
 =cut
 
@@ -1145,6 +1185,20 @@ $subs->example(-1, 'hashes', 'method', fun($tryable) {
 $subs->example(-1, 'id', 'method', fun($tryable) {
   ok my $result = $tryable->result;
   is $result, 'Foo_Bar';
+
+  $result
+});
+
+$subs->example(-1, 'inherits', 'method', fun($tryable) {
+  ok my $result = $tryable->result;
+  is_deeply $result, [];
+
+  $result
+});
+
+$subs->example(-2, 'inherits', 'method', fun($tryable) {
+  ok my $result = $tryable->result;
+  is_deeply $result, ['Foo'];
 
   $result
 });
