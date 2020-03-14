@@ -192,6 +192,11 @@ method id() {
   return $self->label;
 }
 
+method inherits() {
+
+  return $self->array('ISA');
+}
+
 my $loaded_spaces = {};
 
 method load() {
@@ -217,7 +222,7 @@ method load() {
   do {
     require Carp;
 
-    my $message = lc $error || "cause unknown";
+    my $message = $error || "cause unknown";
 
     Carp::confess "Error attempting to load $class: $message";
   }
@@ -389,6 +394,11 @@ method used() {
 method variables() {
 
   return [map [$_, [sort @{$self->$_}]], qw(arrays hashes scalars)];
+}
+
+method version() {
+
+  return $self->scalar('VERSION');
 }
 
 1;

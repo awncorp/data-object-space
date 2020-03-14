@@ -1,6 +1,14 @@
 Changelog for Data-Object-Space
 
-2.00 2020-03-07T20:21:25
+2.01 2020-03-14T15:43:52
+ - Added release updates
+ - Document inheritance and type-library
+ - Method to report inheritence
+ - Method to report version
+ - Remove "lc" of error
+
+2.00 2020-03-07T20:21:27
+ - Built release version 2.00
  - Added release updates
  - Initial implementation
  - Initial commit
