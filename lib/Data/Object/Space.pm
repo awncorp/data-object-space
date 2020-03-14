@@ -391,4 +391,9 @@ method variables() {
   return [map [$_, [sort @{$self->$_}]], qw(arrays hashes scalars)];
 }
 
+method version() {
+
+  return $self->scalar('VERSION');
+}
+
 1;
