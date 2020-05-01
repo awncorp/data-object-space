@@ -36,6 +36,7 @@ method: hash
 method: hashes
 method: id
 method: load
+method: loaded
 method: methods
 method: name
 method: parent
@@ -497,6 +498,43 @@ load() : Str
   $space->load
 
   # CPAN
+
+=cut
+
+=method loaded
+
+The loaded method checks whether the package namespace is already loaded
+returns truthy or falsy.
+
+=signature loaded
+
+loaded() : Int
+
+=example-1 loaded
+
+  package main;
+
+  use Data::Object::Space;
+
+  my $space = Data::Object::Space->new('data/dumper');
+
+  $space->loaded;
+
+  # 0
+
+=example-2 loaded
+
+  package main;
+
+  use Data::Object::Space;
+
+  my $space = Data::Object::Space->new('data/dumper');
+
+  $space->load;
+
+  $space->loaded;
+
+  # 1
 
 =cut
 
@@ -1098,6 +1136,18 @@ $subs->example(-1, 'id', 'method', fun($tryable) {
 $subs->example(-1, 'load', 'method', fun($tryable) {
   ok my $result = $tryable->result;
   is $result, 'CPAN';
+
+  $result
+});
+
+$subs->example(-1, 'loaded', 'method', fun($tryable) {
+  ok !(my $result = $tryable->result);
+
+  $result
+});
+
+$subs->example(-2, 'loaded', 'method', fun($tryable) {
+  ok my $result = $tryable->result;
 
   $result
 });
