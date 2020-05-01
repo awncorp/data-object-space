@@ -380,6 +380,29 @@ and if successful returns a closure.
 
 =cut
 
+=head2 eval
+
+  eval(Str @args) : Any
+
+The eval method takes a list of strings and evaluates them under the namespace
+represented by the instance.
+
+=over 4
+
+=item eval example #1
+
+  package main;
+
+  use Data::Object::Space;
+
+  my $space = Data::Object::Space->new('foo');
+
+  $space->eval('our $VERSION = 0.01');
+
+=back
+
+=cut
+
 =head2 functions
 
   functions() : ArrayRef
@@ -494,6 +517,28 @@ The id method returns the fully-qualified package name as a label.
 
 =cut
 
+=head2 inc
+
+  inc() : Str
+
+The inc method returns the path of the namespace if it exists in C<%INC>.
+
+=over 4
+
+=item inc example #1
+
+  package main;
+
+  my $space = Data::Object::Space->new('Data/Object/Space');
+
+  $space->inc;
+
+  # lib/Data/Object/Space.pm
+
+=back
+
+=cut
+
 =head2 inherits
 
   inherits() : ArrayRef
@@ -563,6 +608,49 @@ C<meta>, or C<import> routine it will be recognized as having been loaded.
   $space->load
 
   # CPAN
+
+=back
+
+=cut
+
+=head2 loaded
+
+  loaded() : Int
+
+The loaded method checks whether the package namespace is already loaded
+returns truthy or falsy.
+
+=over 4
+
+=item loaded example #1
+
+  package main;
+
+  use Data::Object::Space;
+
+  my $space = Data::Object::Space->new('data/dumper');
+
+  $space->loaded;
+
+  # 0
+
+=back
+
+=over 4
+
+=item loaded example #2
+
+  package main;
+
+  use Data::Object::Space;
+
+  my $space = Data::Object::Space->new('data/dumper');
+
+  $space->load;
+
+  $space->loaded;
+
+  # 1
 
 =back
 

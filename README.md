@@ -291,6 +291,23 @@ and if successful returns a closure.
 
         # sub { Foo::Bar::handler(..., @_) }
 
+## eval
+
+    eval(Str @args) : Any
+
+The eval method takes a list of strings and evaluates them under the namespace
+represented by the instance.
+
+- eval example #1
+
+        package main;
+
+        use Data::Object::Space;
+
+        my $space = Data::Object::Space->new('foo');
+
+        $space->eval('our $VERSION = 0.01');
+
 ## functions
 
     functions() : ArrayRef
@@ -381,6 +398,22 @@ The id method returns the fully-qualified package name as a label.
 
         # Foo_Bar
 
+## inc
+
+    inc() : Str
+
+The inc method returns the path of the namespace if it exists in `%INC`.
+
+- inc example #1
+
+        package main;
+
+        my $space = Data::Object::Space->new('Data/Object/Space');
+
+        $space->inc;
+
+        # lib/Data/Object/Space.pm
+
 ## inherits
 
     inherits() : ArrayRef
@@ -438,6 +471,39 @@ packages that only exist in-memory, if the package contains a `new`, `with`,
         $space->load
 
         # CPAN
+
+## loaded
+
+    loaded() : Int
+
+The loaded method checks whether the package namespace is already loaded
+returns truthy or falsy.
+
+- loaded example #1
+
+        package main;
+
+        use Data::Object::Space;
+
+        my $space = Data::Object::Space->new('data/dumper');
+
+        $space->loaded;
+
+        # 0
+
+- loaded example #2
+
+        package main;
+
+        use Data::Object::Space;
+
+        my $space = Data::Object::Space->new('data/dumper');
+
+        $space->load;
+
+        $space->loaded;
+
+        # 1
 
 ## methods
 
