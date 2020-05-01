@@ -31,6 +31,7 @@ method: call
 method: child
 method: children
 method: cop
+method: eval
 method: functions
 method: hash
 method: hashes
@@ -379,6 +380,27 @@ cop(Any @args) : CodeRef
   $space->cop('handler', $space->bless)
 
   # sub { Foo::Bar::handler(..., @_) }
+
+=cut
+
+=method eval
+
+The eval method takes a list of strings and evaluates them under the namespace
+represented by the instance.
+
+=signature eval
+
+eval(Str @args) : Any
+
+=example-1 eval
+
+  package main;
+
+  use Data::Object::Space;
+
+  my $space = Data::Object::Space->new('foo');
+
+  $space->eval('our $VERSION = 0.01');
 
 =cut
 
@@ -1178,6 +1200,14 @@ $subs->example(-1, 'cop', 'method', fun($tryable) {
   is $returned->[2], 2;
   is $returned->[3], 3;
   is $returned->[4], 4;
+
+  $result
+});
+
+$subs->example(-1, 'eval', 'method', fun($tryable) {
+  ok my $result = $tryable->result;
+  is $result, 0.01;
+  is "Foo"->VERSION, 0.01;
 
   $result
 });
