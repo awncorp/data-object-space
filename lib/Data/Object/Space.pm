@@ -150,6 +150,16 @@ method cop($func, @args) {
   return sub { $next->(@args ? (@args, @_) : @_) };
 }
 
+method eval(@args) {
+  local $@;
+
+  my $result = eval join ' ', map "$_", "package @{[$self->package]};", @args;
+
+  Carp::confess $@ if $@;
+
+  return $result;
+}
+
 method functions() {
   my @functions;
 
