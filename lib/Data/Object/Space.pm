@@ -250,6 +250,16 @@ method load() {
   return $class;
 }
 
+method loaded() {
+  my $class = $self->package;
+  my $pexpr = $self->format('path', '%s.pm');
+
+  my $is_loaded_eval = $loaded_spaces->{$class};
+  my $is_loaded_used = $INC{$pexpr};
+
+  return ($is_loaded_eval || $is_loaded_used) ? 1 : 0;
+}
+
 method methods() {
   my @methods;
 
