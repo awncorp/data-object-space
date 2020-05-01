@@ -197,6 +197,11 @@ method inherits() {
   return $self->array('ISA');
 }
 
+method inc() {
+
+  return $INC{$self->format('path', '%s.pm')};
+}
+
 my $loaded_spaces = {};
 
 method load() {

@@ -35,6 +35,7 @@ method: functions
 method: hash
 method: hashes
 method: id
+method: inc
 method: inherits
 method: load
 method: methods
@@ -484,6 +485,26 @@ id() : Str
   $space->id
 
   # Foo_Bar
+
+=cut
+
+=method inc
+
+The inc method returns the path of the namespace if it exists in C<%INC>.
+
+=signature inc
+
+inc() : Str
+
+=example-1 inc
+
+  package main;
+
+  my $space = Data::Object::Space->new('Data/Object/Space');
+
+  $space->inc;
+
+  # lib/Data/Object/Space.pm
 
 =cut
 
@@ -1185,6 +1206,13 @@ $subs->example(-1, 'hashes', 'method', fun($tryable) {
 $subs->example(-1, 'id', 'method', fun($tryable) {
   ok my $result = $tryable->result;
   is $result, 'Foo_Bar';
+
+  $result
+});
+
+$subs->example(-1, 'inc', 'method', fun($tryable) {
+  ok my $result = $tryable->result;
+  like $result, qr(Data/Object/Space.pm);
 
   $result
 });
