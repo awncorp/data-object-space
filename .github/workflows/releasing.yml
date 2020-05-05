@@ -162,31 +162,33 @@ jobs:
       env:
         HARNESS_OPTIONS: j9
 
-  Dist-Upload:
-    runs-on: ubuntu-latest
-    needs: ["Perl-5300", "Perl-5280", "Perl-5260", "Perl-5240", "Perl-5220", "Perl-5182"]
+  # DISABLE AUTO-UPLOAD-RELEASE !!!
 
-    steps:
-    - uses: actions/checkout@v1
-    - name: Setup Git User
-      run: git config --global user.name "Al Newkirk"
-    - name: Setup Git Email
-      run: git config --global user.email "awncorp@cpan.org"
-    - name: Setup GitHub User
-      run: git config --global github.user ${{ secrets.GithubUser }}
-    - name: Setup GitHub Token
-      run: git config --global github.token ${{ secrets.GithubToken }}
-    - name: Install CPANM
-      run: sudo apt install -y cpanminus
-    - name: Install Dist::Zilla
-      run: sudo cpanm -qn Dist::Zilla
-    - name: Install Dist::Zilla Dependencies
-      run: dzil authordeps | sudo cpanm -qn
-    - name: Install Project Dependencies
-      run: sudo cpanm -qn --reinstall --installdeps .
-    - name: Cleanup Build Environment
-      run: dzil clean
-    - name: Build Project Distribution
-      run: V=$(cat VERSION) DZIL_RELEASE=1 dzil build
-    - name: Upload to CPAN
-      run: cpan-upload -u ${{ secrets.CpanUser }} -p ${{ secrets.CpanPass }} $(ls *.tar.gz)
+  # Dist-Upload:
+  #   runs-on: ubuntu-latest
+  #   needs: ["Perl-5300", "Perl-5280", "Perl-5260", "Perl-5240", "Perl-5220", "Perl-5182"]
+
+  #   steps:
+  #   - uses: actions/checkout@v1
+  #   - name: Setup Git User
+  #     run: git config --global user.name "Al Newkirk"
+  #   - name: Setup Git Email
+  #     run: git config --global user.email "awncorp@cpan.org"
+  #   - name: Setup GitHub User
+  #     run: git config --global github.user ${{ secrets.GithubUser }}
+  #   - name: Setup GitHub Token
+  #     run: git config --global github.token ${{ secrets.GithubToken }}
+  #   - name: Install CPANM
+  #     run: sudo apt install -y cpanminus
+  #   - name: Install Dist::Zilla
+  #     run: sudo cpanm -qn Dist::Zilla
+  #   - name: Install Dist::Zilla Dependencies
+  #     run: dzil authordeps | sudo cpanm -qn
+  #   - name: Install Project Dependencies
+  #     run: sudo cpanm -qn --reinstall --installdeps .
+  #   - name: Cleanup Build Environment
+  #     run: dzil clean
+  #   - name: Build Project Distribution
+  #     run: V=$(cat VERSION) DZIL_RELEASE=1 dzil build
+  #   - name: Upload to CPAN
+  #     run: cpan-upload -u ${{ secrets.CpanUser }} -p ${{ secrets.CpanPass }} $(ls *.tar.gz)
