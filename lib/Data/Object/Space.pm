@@ -207,7 +207,7 @@ method inherits() {
   return $self->array('ISA');
 }
 
-method inc() {
+method included() {
 
   return $INC{$self->format('path', '%s.pm')};
 }

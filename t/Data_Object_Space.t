@@ -36,7 +36,7 @@ method: functions
 method: hash
 method: hashes
 method: id
-method: inc
+method: included
 method: inherits
 method: load
 method: loaded
@@ -511,21 +511,21 @@ id() : Str
 
 =cut
 
-=method inc
+=method included
 
-The inc method returns the path of the namespace if it exists in C<%INC>.
+The included method returns the path of the namespace if it exists in C<%INC>.
 
-=signature inc
+=signature included
 
-inc() : Str
+included() : Str
 
-=example-1 inc
+=example-1 included
 
   package main;
 
   my $space = Data::Object::Space->new('Data/Object/Space');
 
-  $space->inc;
+  $space->included;
 
   # lib/Data/Object/Space.pm
 
@@ -1278,7 +1278,7 @@ $subs->example(-1, 'id', 'method', fun($tryable) {
   $result
 });
 
-$subs->example(-1, 'inc', 'method', fun($tryable) {
+$subs->example(-1, 'included', 'method', fun($tryable) {
   ok my $result = $tryable->result;
   like $result, qr(Data/Object/Space.pm);
 
