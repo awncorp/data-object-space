@@ -31,6 +31,7 @@ method: call
 method: child
 method: children
 method: cop
+method: destroy
 method: eval
 method: functions
 method: hash
@@ -381,6 +382,30 @@ cop(Any @args) : CodeRef
   $space->cop('handler', $space->bless)
 
   # sub { Foo::Bar::handler(..., @_) }
+
+=cut
+
+=method destroy
+
+The destroy method attempts to wipe out a namespace and also remove it and its
+children from C<%INC>. B<NOTE:> This can cause catastrophic failures if used
+incorrectly.
+
+=signature destroy
+
+destroy() : Object
+
+=example-1 destroy
+
+  package main;
+
+  use Data::Object::Space;
+
+  my $space = Data::Object::Space->new('data/dumper');
+
+  $space->load; # Data/Dumper
+
+  $space->destroy;
 
 =cut
 
@@ -1238,6 +1263,16 @@ $subs->example(-1, 'cop', 'method', fun($tryable) {
   is $returned->[2], 2;
   is $returned->[3], 3;
   is $returned->[4], 4;
+
+  $result
+});
+
+$subs->example(-1, 'destroy', 'method', fun($tryable) {
+  ok my $result = $tryable->result;
+
+  ok !$result->used;
+  ok !$result->included;
+  ok !$result->loaded;
 
   $result
 });
