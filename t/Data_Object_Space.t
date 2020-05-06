@@ -41,6 +41,7 @@ method: included
 method: inherits
 method: load
 method: loaded
+method: locate
 method: methods
 method: name
 method: parent
@@ -657,6 +658,42 @@ loaded() : Int
   $space->loaded;
 
   # 1
+
+=cut
+
+=method locate
+
+The locate method checks whether the package namespace is available in
+C<@INC>, i.e. on disk. This method returns the file if found or an empty
+string.
+
+=signature locate
+
+locate() : Str
+
+=example-1 locate
+
+  package main;
+
+  use Data::Object::Space;
+
+  my $space = Data::Object::Space->new('foo');
+
+  $space->locate;
+
+  # ''
+
+=example-2 locate
+
+  package main;
+
+  use Data::Object::Space;
+
+  my $space = Data::Object::Space->new('data/dumper');
+
+  $space->locate;
+
+  # /path/to/Data/Dumper.pm
 
 =cut
 
@@ -1369,6 +1406,20 @@ $subs->example(-1, 'loaded', 'method', fun($tryable) {
 
 $subs->example(-2, 'loaded', 'method', fun($tryable) {
   ok my $result = $tryable->result;
+
+  $result
+});
+
+$subs->example(-1, 'locate', 'method', fun($tryable) {
+  ok !(my $result = $tryable->result);
+  ok !length($result);
+
+  $result
+});
+
+$subs->example(-2, 'locate', 'method', fun($tryable) {
+  ok my $result = $tryable->result;
+  ok length($result);
 
   $result
 });

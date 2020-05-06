@@ -274,6 +274,18 @@ method loaded() {
   return ($is_loaded_eval || $is_loaded_used) ? 1 : 0;
 }
 
+method locate() {
+  my $found = '';
+
+  my $file = $self->format('path', '%s.pm');
+
+  for my $path (@INC) {
+    do { $found = "$path/$file"; last } if -f "$path/$file";
+  }
+
+  return $found;
+}
+
 method methods() {
   my @methods;
 
@@ -428,7 +440,6 @@ method used() {
   return $path if $has{$class};
 
   for my $item (keys %INC) {
-
     return $path if $item =~ /$regexp\.pm$/;
   }
 
