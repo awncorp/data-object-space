@@ -12,6 +12,8 @@ use parent 'Data::Object::Name';
 
 # METHODS
 
+my %has;
+
 method append(@args) {
   my $class = $self->class;
 
@@ -150,6 +152,20 @@ method cop($func, @args) {
   return sub { $next->(@args ? (@args, @_) : @_) };
 }
 
+method destroy() {
+  require Symbol;
+
+  Symbol::delete_package($self->package);
+
+  my $c_re = quotemeta $self->package;
+  my $p_re = quotemeta $self->path;
+
+  map {delete $has{$_}} grep /^$c_re/, keys %has;
+  map {delete $INC{$_}} grep /^$p_re/, keys %INC;
+
+  return $self;
+}
+
 method eval(@args) {
   local $@;
 
@@ -207,17 +223,15 @@ method inherits() {
   return $self->array('ISA');
 }
 
-method inc() {
+method included() {
 
   return $INC{$self->format('path', '%s.pm')};
 }
 
-my $loaded_spaces = {};
-
 method load() {
   my $class = $self->package;
 
-  return $class if $loaded_spaces->{$class};
+  return $class if $has{$class};
 
   my $failed = !$class || $class !~ /^\w(?:[\w:']*\w)?$/;
   my $loaded;
@@ -245,7 +259,7 @@ method load() {
   or $failed
   or not $loaded;
 
-  $loaded_spaces->{$class} = 1;
+  $has{$class} = 1;
 
   return $class;
 }
@@ -254,10 +268,22 @@ method loaded() {
   my $class = $self->package;
   my $pexpr = $self->format('path', '%s.pm');
 
-  my $is_loaded_eval = $loaded_spaces->{$class};
+  my $is_loaded_eval = $has{$class};
   my $is_loaded_used = $INC{$pexpr};
 
   return ($is_loaded_eval || $is_loaded_used) ? 1 : 0;
+}
+
+method locate() {
+  my $found = '';
+
+  my $file = $self->format('path', '%s.pm');
+
+  for my $path (@INC) {
+    do { $found = "$path/$file"; last } if -f "$path/$file";
+  }
+
+  return $found;
 }
 
 method methods() {
@@ -315,6 +341,14 @@ method prepend(@args) {
     (map $class->new($_)->path, @args), $self->path;
 
   return $class->new($path);
+}
+
+method rebase(@args) {
+  my $class = $self->class;
+
+  my $path = join '/', map $class->new($_)->path, @args;
+
+  return $class->new($self->base)->prepend($path);
 }
 
 method root() {
@@ -400,16 +434,12 @@ method siblings() {
 
 method used() {
   my $class = $self->package;
-  my $loaded = $loaded_spaces->{$class};
   my $path = $self->path;
   my $regexp = quotemeta $path;
 
-  if ($loaded) {
+  return $path if $has{$class};
 
-    return $path;
-  }
   for my $item (keys %INC) {
-
     return $path if $item =~ /$regexp\.pm$/;
   }
 

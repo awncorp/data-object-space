@@ -291,6 +291,26 @@ and if successful returns a closure.
 
         # sub { Foo::Bar::handler(..., @_) }
 
+## destroy
+
+    destroy() : Object
+
+The destroy method attempts to wipe out a namespace and also remove it and its
+children from `%INC`. **NOTE:** This can cause catastrophic failures if used
+incorrectly.
+
+- destroy example #1
+
+        package main;
+
+        use Data::Object::Space;
+
+        my $space = Data::Object::Space->new('data/dumper');
+
+        $space->load; # Data/Dumper
+
+        $space->destroy;
+
 ## eval
 
     eval(Str @args) : Any
@@ -398,19 +418,19 @@ The id method returns the fully-qualified package name as a label.
 
         # Foo_Bar
 
-## inc
+## included
 
-    inc() : Str
+    included() : Str
 
-The inc method returns the path of the namespace if it exists in `%INC`.
+The included method returns the path of the namespace if it exists in `%INC`.
 
-- inc example #1
+- included example #1
 
         package main;
 
         my $space = Data::Object::Space->new('Data/Object/Space');
 
-        $space->inc;
+        $space->included;
 
         # lib/Data/Object/Space.pm
 
@@ -504,6 +524,38 @@ returns truthy or falsy.
         $space->loaded;
 
         # 1
+
+## locate
+
+    locate() : Str
+
+The locate method checks whether the package namespace is available in
+`@INC`, i.e. on disk. This method returns the file if found or an empty
+string.
+
+- locate example #1
+
+        package main;
+
+        use Data::Object::Space;
+
+        my $space = Data::Object::Space->new('foo');
+
+        $space->locate;
+
+        # ''
+
+- locate example #2
+
+        package main;
+
+        use Data::Object::Space;
+
+        my $space = Data::Object::Space->new('data/dumper');
+
+        $space->locate;
+
+        # /path/to/Data/Dumper.pm
 
 ## methods
 
@@ -662,6 +714,21 @@ parts.
         $space->prepend('etc', 'tmp');
 
         # 'Etc/Tmp/Foo/Bar'
+
+## rebase
+
+    rebase(Str @args) : Object
+
+The rebase method returns an object by prepending the package namespace
+specified to the base of the current object's namespace.
+
+- rebase example #1
+
+        # given: synopsis
+
+        $space->rebase('zoo');
+
+        # Zoo/Bar
 
 ## root
 

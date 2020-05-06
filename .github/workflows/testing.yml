@@ -3,9 +3,11 @@ name: Testing
 on:
   push:
     branches:
+    - hotfix-*
     - issue-*
     - milestone-*
     - project-*
+    - support-*
 
 jobs:
   Perl-0000:

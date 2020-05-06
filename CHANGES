@@ -1,6 +1,15 @@
 Changelog for Data-Object-Space
 
-2.02 2020-05-01T01:49:40
+2.03 2020-05-06T02:30:17
+ - Added release updates
+ - Add "locate" method
+ - Add "rebase" method
+ - Add "destroy" method
+ - Rename "inc" to "included"
+ - Update branching and workflow
+
+2.02 2020-05-01T01:49:41
+ - Built release version 2.02
  - Added release updates
  - Add "inc" method
  - Add ability to eval within a package
