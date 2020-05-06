@@ -2,5 +2,5 @@
 *.pm linguist-language=Perl
 *.t linguist-language=Perl
 
-.github/build linguist-documentation
-.github/release linguist-documentation
+.github/build -linguist-language
+.github/release -linguist-language
