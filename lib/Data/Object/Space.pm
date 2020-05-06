@@ -331,6 +331,14 @@ method prepend(@args) {
   return $class->new($path);
 }
 
+method rebase(@args) {
+  my $class = $self->class;
+
+  my $path = join '/', map $class->new($_)->path, @args;
+
+  return $class->new($self->base)->prepend($path);
+}
+
 method root() {
 
   return $self->parse->[0];

@@ -47,6 +47,7 @@ method: parent
 method: parse
 method: parts
 method: prepend
+method: rebase
 method: root
 method: routine
 method: routines
@@ -841,6 +842,25 @@ prepend(Str @args) : Object
 
 =cut
 
+=method rebase
+
+The rebase method returns an object by prepending the package namespace
+specified to the base of the current object's namespace.
+
+=signature rebase
+
+rebase(Str @args) : Object
+
+=example-1 rebase
+
+  # given: synopsis
+
+  $space->rebase('zoo');
+
+  # Zoo/Bar
+
+=cut
+
 =method root
 
 The root method returns the root package namespace segments (parts). Sometimes
@@ -1440,6 +1460,13 @@ $subs->example(-1, 'prepend', 'method', fun($tryable) {
 $subs->example(-2, 'prepend', 'method', fun($tryable) {
   ok my $result = $tryable->result;
   is $$result, 'Etc/Tmp/Foo/Bar';
+
+  $result
+});
+
+$subs->example(-1, 'rebase', 'method', fun($tryable) {
+  ok my $result = $tryable->result;
+  is $$result, 'Zoo/Bar';
 
   $result
 });
