@@ -13,7 +13,7 @@ my %WriteMakefileArgs = (
     "ExtUtils::MakeMaker" => 0
   },
   "DISTNAME" => "Data-Object-Space",
-  "LICENSE" => "perl",
+  "LICENSE" => "apache",
   "MIN_PERL_VERSION" => "5.014",
   "NAME" => "Data::Object::Space",
   "PREREQ_PM" => {
