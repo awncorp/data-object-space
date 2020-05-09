@@ -44,6 +44,11 @@ method arrays() {
   return $arrays;
 }
 
+method authority() {
+
+  return $self->scalar('AUTHORITY');
+}
+
 method base() {
 
   return $self->parse->[-1];

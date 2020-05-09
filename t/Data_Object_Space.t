@@ -24,6 +24,7 @@ Namespace Class for Perl 5
 method: append
 method: array
 method: arrays
+method: authority
 method: base
 method: bless
 method: build
@@ -166,6 +167,47 @@ arrays() : ArrayRef
   $space->arrays
 
   # ['handler', 'initial']
+
+=cut
+
+=method authority
+
+The authority method returns the C<AUTHORITY> declared on the target package,
+if any.
+
+=signature authority
+
+authority() : Maybe[Str]
+
+=example-1 authority
+
+  package Foo::Boo;
+
+  package main;
+
+  use Data::Object::Space;
+
+  my $space = Data::Object::Space->new('foo/boo');
+
+  $space->authority
+
+  # undef
+
+=example-2 authority
+
+  package Foo::Boo;
+
+  our $AUTHORITY = 'cpan:AWNCORP';
+
+  package main;
+
+  use Data::Object::Space;
+
+  my $space = Data::Object::Space->new('foo/boo');
+
+  $space->authority
+
+  # 'cpan:AWNCORP'
 
 =cut
 
@@ -1247,6 +1289,20 @@ $subs->example(-1, 'array', 'method', fun($tryable) {
 $subs->example(-1, 'arrays', 'method', fun($tryable) {
   ok my $result = $tryable->result;
   is_deeply $result, ['handler', 'initial'];
+
+  $result
+});
+
+$subs->example(-1, 'authority', 'method', fun($tryable) {
+  ok !(my $result = $tryable->result);
+  is $result, undef;
+
+  $result
+});
+
+$subs->example(-2, 'authority', 'method', fun($tryable) {
+  ok my $result = $tryable->result;
+  is $result, 'cpan:AWNCORP';
 
   $result
 });
