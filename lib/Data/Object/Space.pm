@@ -6,6 +6,8 @@ use strict;
 use warnings;
 use routines;
 
+use Sub::Util ();
+
 use parent 'Data::Object::Name';
 
 # VERSION
@@ -223,6 +225,30 @@ method id() {
   return $self->label;
 }
 
+method init() {
+  my $class = $self->package;
+
+  if ($self->routine('import')) {
+
+    return $self->package;
+  }
+
+  $class = $self->locate ? $self->load : $self->package;
+
+  if ($self->routine('import')) {
+
+    return $class;
+  }
+  else {
+
+    my $import = sub { $class };
+
+    $self->inject('import', $import);
+
+    return $class;
+  }
+}
+
 method inherits() {
 
   return $self->array('ISA');
@@ -231,6 +257,17 @@ method inherits() {
 method included() {
 
   return $INC{$self->format('path', '%s.pm')};
+}
+
+method inject($name, $coderef) {
+  no strict 'refs';
+  no warnings 'redefine';
+
+  my $class = $self->package;
+
+  return *{"${class}::${name}"} = Sub::Util::set_subname(
+    "${class}::${name}", $coderef || sub{$class}
+  );
 }
 
 method load() {
