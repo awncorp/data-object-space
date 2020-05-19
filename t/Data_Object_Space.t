@@ -40,6 +40,8 @@ method: hashes
 method: id
 method: included
 method: inherits
+method: init
+method: inject
 method: load
 method: loaded
 method: locate
@@ -636,6 +638,53 @@ inherits() : ArrayRef
   $space->inherits
 
   # ['Foo']
+
+=cut
+
+=method init
+
+The init method ensures that the package namespace is loaded and, whether
+created in-memory or on-disk, is flagged as being loaded and loadable.
+
+=signature init
+
+init() : Str
+
+=example-1 init
+
+  package main;
+
+  use Data::Object::Space;
+
+  my $space = Data::Object::Space->new('kit');
+
+  $space->init
+
+  # Kit
+
+=cut
+
+=method inject
+
+The inject method monkey-patches the package namespace, installing a named
+subroutine into the package which can then be called normally, returning the
+fully-qualified subroutine name.
+
+=signature inject
+
+inject(Str $name, Maybe[CodeRef] $coderef) : Any
+
+=example-1 inject
+
+  package main;
+
+  use Data::Object::Space;
+
+  my $space = Data::Object::Space->new('kit');
+
+  $space->inject('build', sub { 'finished' });
+
+  # *Kit::build
 
 =cut
 
@@ -1443,6 +1492,23 @@ $subs->example(-1, 'inherits', 'method', fun($tryable) {
 $subs->example(-2, 'inherits', 'method', fun($tryable) {
   ok my $result = $tryable->result;
   is_deeply $result, ['Foo'];
+
+  $result
+});
+
+$subs->example(-1, 'init', 'method', fun($tryable) {
+  ok my $result = $tryable->result;
+  is $result, 'Kit';
+
+  $result
+});
+
+$subs->example(-1, 'inject', 'method', fun($tryable) {
+  ok my $result = $tryable->result;
+  is $result, '*Kit::build';
+
+  my $package = 'Kit';
+  is $package->build, 'finished';
 
   $result
 });
