@@ -457,6 +457,29 @@ and if successful returns a closure.
 
 =cut
 
+=head2 data
+
+  data() : Str
+
+The data method attempts to read and return any content stored in the C<DATA>
+section of the package namespace.
+
+=over 4
+
+=item data example #1
+
+  package main;
+
+  use Data::Object::Space;
+
+  my $space = Data::Object::Space->new('foo');
+
+  $space->data; # ''
+
+=back
+
+=cut
+
 =head2 destroy
 
   destroy() : Object
@@ -1095,6 +1118,27 @@ specified to the base of the current object's namespace.
 
 =cut
 
+=head2 require
+
+  require(Str $target) : Any
+
+The require method executes a C<require> statement within the package namespace
+specified.
+
+=over 4
+
+=item require example #1
+
+  # given: synopsis
+
+  $space->require('Moo');
+
+  # 1
+
+=back
+
+=cut
+
 =head2 root
 
   root() : Str
@@ -1288,6 +1332,63 @@ deep).
   #   'Encode/Config'
   #   ...
   # ]
+
+=back
+
+=cut
+
+=head2 use
+
+  use(Str | Tuple[Str, Str] $target, Any @params) : Object
+
+The use method executes a C<use> statement within the package namespace
+specified.
+
+=over 4
+
+=item use example #1
+
+  package main;
+
+  use Data::Object::Space;
+
+  my $space = Data::Object::Space->new('foo/goo');
+
+  $space->use('Moo');
+
+  # $self
+
+=back
+
+=over 4
+
+=item use example #2
+
+  package main;
+
+  use Data::Object::Space;
+
+  my $space = Data::Object::Space->new('foo/hoo');
+
+  $space->use('Moo', 'has');
+
+  # $self
+
+=back
+
+=over 4
+
+=item use example #3
+
+  package main;
+
+  use Data::Object::Space;
+
+  my $space = Data::Object::Space->new('foo/ioo');
+
+  $space->use(['Moo', 9.99], 'has');
+
+  # $self
 
 =back
 

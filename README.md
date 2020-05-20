@@ -354,6 +354,23 @@ and if successful returns a closure.
 
         # sub { Foo::Bar::handler(..., @_) }
 
+## data
+
+    data() : Str
+
+The data method attempts to read and return any content stored in the `DATA`
+section of the package namespace.
+
+- data example #1
+
+        package main;
+
+        use Data::Object::Space;
+
+        my $space = Data::Object::Space->new('foo');
+
+        $space->data; # ''
+
 ## destroy
 
     destroy() : Object
@@ -832,6 +849,21 @@ specified to the base of the current object's namespace.
 
         # Zoo/Bar
 
+## require
+
+    require(Str $target) : Any
+
+The require method executes a `require` statement within the package namespace
+specified.
+
+- require example #1
+
+        # given: synopsis
+
+        $space->require('Moo');
+
+        # 1
+
 ## root
 
     root() : Str
@@ -987,6 +1019,49 @@ deep).
         #   'Encode/Config'
         #   ...
         # ]
+
+## use
+
+    use(Str | Tuple[Str, Str] $target, Any @params) : Object
+
+The use method executes a `use` statement within the package namespace
+specified.
+
+- use example #1
+
+        package main;
+
+        use Data::Object::Space;
+
+        my $space = Data::Object::Space->new('foo/goo');
+
+        $space->use('Moo');
+
+        # $self
+
+- use example #2
+
+        package main;
+
+        use Data::Object::Space;
+
+        my $space = Data::Object::Space->new('foo/hoo');
+
+        $space->use('Moo', 'has');
+
+        # $self
+
+- use example #3
+
+        package main;
+
+        use Data::Object::Space;
+
+        my $space = Data::Object::Space->new('foo/ioo');
+
+        $space->use(['Moo', 9.99], 'has');
+
+        # $self
 
 ## used
 
