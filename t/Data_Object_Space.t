@@ -58,6 +58,7 @@ method: parse
 method: parts
 method: prepend
 method: rebase
+method: require
 method: root
 method: routine
 method: routines
@@ -1021,6 +1022,25 @@ rebase(Str @args) : Object
 
 =cut
 
+=method require
+
+The require method executes a C<require> statement within the package namespace
+specified.
+
+=signature require
+
+require(Str $target) : Any
+
+=example-1 require
+
+  # given: synopsis
+
+  $space->require('Moo');
+
+  # 1
+
+=cut
+
 =method root
 
 The root method returns the root package namespace segments (parts). Sometimes
@@ -1679,6 +1699,13 @@ $subs->example(-2, 'prepend', 'method', fun($tryable) {
 $subs->example(-1, 'rebase', 'method', fun($tryable) {
   ok my $result = $tryable->result;
   is $$result, 'Zoo/Bar';
+
+  $result
+});
+
+$subs->example(-1, 'require', 'method', fun($tryable) {
+  ok my $result = $tryable->result;
+  is $result, 1;
 
   $result
 });

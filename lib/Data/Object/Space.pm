@@ -404,6 +404,12 @@ method rebase(@args) {
   return $class->new($self->base)->prepend($path);
 }
 
+method require($target) {
+  $target = "'$target'" if -f $target;
+
+  return $self->eval("require $target");
+}
+
 method root() {
 
   return $self->parse->[0];
