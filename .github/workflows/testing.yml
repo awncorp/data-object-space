@@ -35,3 +35,29 @@ jobs:
       run: prove -Ilib -r t
       env:
         HARNESS_OPTIONS: j9
+
+  Perl-5163:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Install Perlbrew
+      run: sudo apt install -y perlbrew
+    - name: Initial Perlbrew
+      run: sudo perlbrew init
+    - name: Install CPANM
+      run: sudo perlbrew install-cpanm
+    - name: Install Perl 5.16
+      run: sudo perlbrew install -n perl-5.16.3
+    - name: Verify Perl Version
+      run: sudo perlbrew exec --with perl-5.16.3 perl -V
+    - name: Install Perl::Critic
+      run: sudo perlbrew exec --with perl-5.16.3 cpanm -qn Perl::Critic
+    - name: Install Perl Dependencies
+      run: sudo perlbrew exec --with perl-5.16.3 cpanm -qn --reinstall --installdeps .
+    - name: Critiquing Project
+      run: sudo perlbrew exec --with perl-5.16.3 perlcritic lib t
+    - name: Testing Project
+      run: sudo perlbrew exec --with perl-5.16.3 prove -Ilib -r t
+      env:
+        HARNESS_OPTIONS: j9

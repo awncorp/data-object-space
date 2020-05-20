@@ -234,7 +234,7 @@ method init() {
 
   if ($self->routine('import')) {
 
-    return $self->package;
+    return $class;
   }
 
   $class = $self->locate ? $self->load : $self->package;
@@ -248,6 +248,7 @@ method init() {
     my $import = sub { $class };
 
     $self->inject('import', $import);
+    $self->load;
 
     return $class;
   }
@@ -264,14 +265,20 @@ method included() {
 }
 
 method inject($name, $coderef) {
+  my $class = $self->package;
+
+  local $@;
   no strict 'refs';
   no warnings 'redefine';
 
-  my $class = $self->package;
-
-  return *{"${class}::${name}"} = Sub::Util::set_subname(
-    "${class}::${name}", $coderef || sub{$class}
-  );
+  if (state $subutil = eval "require Sub::Util") {
+    return *{"${class}::${name}"} = Sub::Util::set_subname(
+      "${class}::${name}", $coderef || sub{$class}
+    );
+  }
+  else {
+    return *{"${class}::${name}"} = $coderef || sub{$class};
+  }
 }
 
 method load() {
