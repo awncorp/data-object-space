@@ -38,6 +38,7 @@ method: call
 method: child
 method: children
 method: cop
+method: data
 method: destroy
 method: eval
 method: functions
@@ -461,6 +462,27 @@ cop(Any @args) : CodeRef
   $space->cop('handler', $space->bless)
 
   # sub { Foo::Bar::handler(..., @_) }
+
+=cut
+
+=method data
+
+The data method attempts to read and return any content stored in the C<DATA>
+section of the package namespace.
+
+=signature data
+
+data() : Str
+
+=example-1 data
+
+  package main;
+
+  use Data::Object::Space;
+
+  my $space = Data::Object::Space->new('foo');
+
+  $space->data; # ''
 
 =cut
 
@@ -1484,6 +1506,13 @@ $subs->example(-1, 'cop', 'method', fun($tryable) {
   is $returned->[2], 2;
   is $returned->[3], 3;
   is $returned->[4], 4;
+
+  $result
+});
+
+$subs->example(-1, 'data', 'method', fun($tryable) {
+  ok !(my $result = $tryable->result);
+  is $result, '';
 
   $result
 });

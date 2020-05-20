@@ -163,6 +163,27 @@ method cop($func, @args) {
   return sub { $next->(@args ? (@args, @_) : @_) };
 }
 
+method data() {
+  no strict 'refs';
+
+  my $class = $self->package;
+
+  local $.;
+
+  my $handle = \*{"${class}::DATA"};
+
+  return '' if !fileno $handle;
+
+  seek $handle, 0, 0;
+
+  my $data = join '', <$handle>;
+
+  $data =~ s/^.*\n__DATA__\r?\n/\n/s;
+  $data =~ s/\n__END__\r?\n.*$/\n/s;
+
+  return $data;
+}
+
 method destroy() {
   require Symbol;
 
