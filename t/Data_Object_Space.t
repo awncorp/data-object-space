@@ -67,6 +67,7 @@ method: scalar
 method: scalars
 method: sibling
 method: siblings
+method: use
 method: used
 method: variables
 method: version
@@ -1247,6 +1248,53 @@ siblings() : ArrayRef[Object]
 
 =cut
 
+=method use
+
+The use method executes a C<use> statement within the package namespace
+specified.
+
+=signature use
+
+use(Str | Tuple[Str, Str] $target, Any @params) : Object
+
+=example-1 use
+
+  package main;
+
+  use Data::Object::Space;
+
+  my $space = Data::Object::Space->new('foo/goo');
+
+  $space->use('Moo');
+
+  # $self
+
+=example-2 use
+
+  package main;
+
+  use Data::Object::Space;
+
+  my $space = Data::Object::Space->new('foo/hoo');
+
+  $space->use('Moo', 'has');
+
+  # $self
+
+=example-3 use
+
+  package main;
+
+  use Data::Object::Space;
+
+  my $space = Data::Object::Space->new('foo/ioo');
+
+  $space->use(['Moo', 9.99], 'has');
+
+  # $self
+
+=cut
+
 =method used
 
 The used method searches C<%INC> for the package namespace and if found returns
@@ -1785,6 +1833,48 @@ $subs->example(-1, 'siblings', 'method', fun($tryable) {
   ok my $result = $tryable->result;
   ok @$result > 1;
   ok $_->isa('Data::Object::Space') for @$result;
+
+  $result
+});
+
+$subs->example(-1, 'use', 'method', fun($tryable) {
+  ok my $result = $tryable->result;
+  is $result->package, 'Foo::Goo';
+  ok $result->package->can('after');
+  ok $result->package->can('before');
+  ok $result->package->can('extends');
+  ok $result->package->can('has');
+  ok $result->package->can('with');
+
+  $result
+});
+
+$subs->example(-2, 'use', 'method', fun($tryable) {
+  ok my $result = $tryable->result;
+  is $result->package, 'Foo::Hoo';
+  ok $result->package->can('after');
+  ok $result->package->can('before');
+  ok $result->package->can('extends');
+  ok $result->package->can('has');
+  ok $result->package->can('with');
+
+  $result
+});
+
+$subs->example(-3, 'use', 'method', fun($tryable) {
+  my $failed = 0;
+  $tryable->default(fun($error) {
+    $failed++;
+    Data::Object::Space->new('foo/ioo');
+  });
+  ok my $result = $tryable->result;
+  is $result->package, 'Foo::Ioo';
+  ok $failed;
+  ok !$result->package->can('after');
+  ok !$result->package->can('before');
+  ok !$result->package->can('extends');
+  ok !$result->package->can('has');
+  ok !$result->package->can('with');
 
   $result
 });

@@ -6,8 +6,6 @@ use strict;
 use warnings;
 use routines;
 
-use Sub::Util ();
-
 use parent 'Data::Object::Name';
 
 # VERSION
@@ -510,6 +508,31 @@ method siblings() {
     map {s/(.*)\.$type$/$1/r}
     sort keys %list
   ];
+}
+
+method use($target, @params) {
+  my $version;
+
+  my $class = $self->package;
+
+  ($target, $version) = @$target if ref $target eq 'ARRAY';
+
+  $self->require($target);
+
+  require Scalar::Util;
+
+  my @statement = (
+    'no strict "subs";',
+    (
+      Scalar::Util::looks_like_number($version)
+        ? "${target}->VERSION($version);" : ()
+    ),
+    'sub{ my ($target, @params) = @_; $target->import(@params)}'
+  );
+
+  $self->eval(join("\n", @statement))->($target, $class, @params);
+
+  return $self;
 }
 
 method used() {
