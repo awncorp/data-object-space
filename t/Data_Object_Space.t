@@ -13,6 +13,12 @@ Data::Object::Space
 
 =cut
 
+=tagline
+
+Namespace Class
+
+=cut
+
 =abstract
 
 Namespace Class for Perl 5

@@ -1,6 +1,6 @@
 # NAME
 
-Data::Object::Space
+Data::Object::Space - Namespace Class
 
 # ABSTRACT
 
@@ -100,6 +100,43 @@ names.
         $space->arrays
 
         # ['handler', 'initial']
+
+## authority
+
+    authority() : Maybe[Str]
+
+The authority method returns the `AUTHORITY` declared on the target package,
+if any.
+
+- authority example #1
+
+        package Foo::Boo;
+
+        package main;
+
+        use Data::Object::Space;
+
+        my $space = Data::Object::Space->new('foo/boo');
+
+        $space->authority
+
+        # undef
+
+- authority example #2
+
+        package Foo::Boo;
+
+        our $AUTHORITY = 'cpan:AWNCORP';
+
+        package main;
+
+        use Data::Object::Space;
+
+        my $space = Data::Object::Space->new('foo/boo');
+
+        $space->authority
+
+        # 'cpan:AWNCORP'
 
 ## base
 
@@ -220,6 +257,32 @@ and if successful returns the resulting value.
         $space->call('start')
 
         # started
+
+- call example #2
+
+        # given: synopsis
+
+        package Zoo;
+
+        sub import;
+
+        sub AUTOLOAD {
+          bless {};
+        }
+
+        sub DESTROY {
+          ; # noop
+        }
+
+        package main;
+
+        use Data::Object::Space;
+
+        $space = Data::Object::Space->new('zoo');
+
+        $space->call('start')
+
+        # bless({}, 'Zoo')
 
 ## child
 
@@ -468,6 +531,45 @@ derived from.
         $space->inherits
 
         # ['Foo']
+
+## init
+
+    init() : Str
+
+The init method ensures that the package namespace is loaded and, whether
+created in-memory or on-disk, is flagged as being loaded and loadable.
+
+- init example #1
+
+        package main;
+
+        use Data::Object::Space;
+
+        my $space = Data::Object::Space->new('kit');
+
+        $space->init
+
+        # Kit
+
+## inject
+
+    inject(Str $name, Maybe[CodeRef] $coderef) : Any
+
+The inject method monkey-patches the package namespace, installing a named
+subroutine into the package which can then be called normally, returning the
+fully-qualified subroutine name.
+
+- inject example #1
+
+        package main;
+
+        use Data::Object::Space;
+
+        my $space = Data::Object::Space->new('kit');
+
+        $space->inject('build', sub { 'finished' });
+
+        # *Kit::build
 
 ## load
 

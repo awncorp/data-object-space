@@ -3,7 +3,7 @@
 
 =head1 NAME
 
-Data::Object::Space
+Data::Object::Space - Namespace Class
 
 =cut
 
@@ -135,6 +135,53 @@ names.
   $space->arrays
 
   # ['handler', 'initial']
+
+=back
+
+=cut
+
+=head2 authority
+
+  authority() : Maybe[Str]
+
+The authority method returns the C<AUTHORITY> declared on the target package,
+if any.
+
+=over 4
+
+=item authority example #1
+
+  package Foo::Boo;
+
+  package main;
+
+  use Data::Object::Space;
+
+  my $space = Data::Object::Space->new('foo/boo');
+
+  $space->authority
+
+  # undef
+
+=back
+
+=over 4
+
+=item authority example #2
+
+  package Foo::Boo;
+
+  our $AUTHORITY = 'cpan:AWNCORP';
+
+  package main;
+
+  use Data::Object::Space;
+
+  my $space = Data::Object::Space->new('foo/boo');
+
+  $space->authority
+
+  # 'cpan:AWNCORP'
 
 =back
 
@@ -287,6 +334,36 @@ and if successful returns the resulting value.
   $space->call('start')
 
   # started
+
+=back
+
+=over 4
+
+=item call example #2
+
+  # given: synopsis
+
+  package Zoo;
+
+  sub import;
+
+  sub AUTOLOAD {
+    bless {};
+  }
+
+  sub DESTROY {
+    ; # noop
+  }
+
+  package main;
+
+  use Data::Object::Space;
+
+  $space = Data::Object::Space->new('zoo');
+
+  $space->call('start')
+
+  # bless({}, 'Zoo')
 
 =back
 
@@ -605,6 +682,57 @@ derived from.
   $space->inherits
 
   # ['Foo']
+
+=back
+
+=cut
+
+=head2 init
+
+  init() : Str
+
+The init method ensures that the package namespace is loaded and, whether
+created in-memory or on-disk, is flagged as being loaded and loadable.
+
+=over 4
+
+=item init example #1
+
+  package main;
+
+  use Data::Object::Space;
+
+  my $space = Data::Object::Space->new('kit');
+
+  $space->init
+
+  # Kit
+
+=back
+
+=cut
+
+=head2 inject
+
+  inject(Str $name, Maybe[CodeRef] $coderef) : Any
+
+The inject method monkey-patches the package namespace, installing a named
+subroutine into the package which can then be called normally, returning the
+fully-qualified subroutine name.
+
+=over 4
+
+=item inject example #1
+
+  package main;
+
+  use Data::Object::Space;
+
+  my $space = Data::Object::Space->new('kit');
+
+  $space->inject('build', sub { 'finished' });
+
+  # *Kit::build
 
 =back
 
