@@ -74,7 +74,7 @@ method call($func, @args) {
   unless ($func) {
     require Carp;
 
-    my $text = qq[Attempt to call undefined object method in package "$class"];
+    my $text = qq[Attempt to call undefined class method in package "$class"];
 
     Carp::confess $text;
   }
@@ -82,9 +82,13 @@ method call($func, @args) {
   my $next = $class->can($func);
 
   unless ($next) {
+    $next = sub { $class->$func(@args) } if $class->can('AUTOLOAD');
+  }
+
+  unless ($next) {
     require Carp;
 
-    my $text = qq[Unable to locate object method "$func" via package "$class"];
+    my $text = qq[Unable to locate class method "$func" via package "$class"];
 
     Carp::confess $text;
   }
