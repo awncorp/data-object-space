@@ -347,6 +347,32 @@ call(Any @args) : Any
 
   # started
 
+=example-2 call
+
+  # given: synopsis
+
+  package Zoo;
+
+  sub import;
+
+  sub AUTOLOAD {
+    bless {};
+  }
+
+  sub DESTROY {
+    ; # noop
+  }
+
+  package main;
+
+  use Data::Object::Space;
+
+  $space = Data::Object::Space->new('zoo');
+
+  $space->call('start')
+
+  # bless({}, 'Zoo')
+
 =cut
 
 =method child
@@ -1396,6 +1422,13 @@ $subs->example(-2, 'build', 'method', fun($tryable) {
 $subs->example(-1, 'call', 'method', fun($tryable) {
   ok my $result = $tryable->result;
   is $result, 'started';
+
+  $result
+});
+
+$subs->example(-2, 'call', 'method', fun($tryable) {
+  ok my $result = $tryable->result;
+  ok $result->isa('Zoo');
 
   $result
 });
