@@ -68,6 +68,7 @@ method: scalar
 method: scalars
 method: sibling
 method: siblings
+method: tryload
 method: use
 method: used
 method: variables
@@ -1275,6 +1276,42 @@ siblings() : ArrayRef[Object]
 
 =cut
 
+=method tryload
+
+The tryload method attempt to C<load> the represented package using the
+L</load> method and returns truthy/falsy based on whether the package was
+loaded.
+
+=signature tryload
+
+tryload() : Bool
+
+=example-1 tryload
+
+  package main;
+
+  use Data::Object::Space;
+
+  my $space = Data::Object::Space->new('c_p_a_n');
+
+  $space->tryload
+
+  # 1
+
+=example-2 tryload
+
+  package main;
+
+  use Data::Object::Space;
+
+  my $space = Data::Object::Space->new('brianne_spinka');
+
+  $space->tryload
+
+  # 0
+
+=cut
+
 =method use
 
 The use method executes a C<use> statement within the package namespace
@@ -1870,6 +1907,18 @@ $subs->example(-1, 'siblings', 'method', fun($tryable) {
   ok my $result = $tryable->result;
   ok @$result > 1;
   ok $_->isa('Data::Object::Space') for @$result;
+
+  $result
+});
+
+$subs->example(-1, 'tryload', 'method', fun($tryable) {
+  ok my $result = $tryable->result;
+
+  $result
+});
+
+$subs->example(-2, 'tryload', 'method', fun($tryable) {
+  ok !(my $result = $tryable->result);
 
   $result
 });

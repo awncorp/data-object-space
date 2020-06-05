@@ -523,6 +523,11 @@ method siblings() {
   ];
 }
 
+method tryload() {
+
+  return do { local $@; eval { $self->load }; int!$@ };
+}
+
 method use($target, @params) {
   my $version;
 
