@@ -27,6 +27,7 @@ Namespace Class for Perl 5
 
 =includes
 
+method: all
 method: append
 method: array
 method: arrays
@@ -99,6 +100,32 @@ Types::Standard
 =description
 
 This package provides methods for parsing and manipulating package namespaces.
+
+=cut
+
+=method all
+
+The all method executes any available method on the instance and all instances
+representing packages inherited by the package represented by the invocant.
+
+=signature all
+
+all(Str $name, Any @args) : ArrayRef[Tuple[Str, Any]]
+
+=example-1 all
+
+  package main;
+
+  use Data::Object::Space;
+
+  my $space = Data::Object::Space->new('data/object/space');
+
+  $space->all('id');
+
+  # [
+  #   ['Data::Object::Space', 'Data_Object_Space'],
+  #   ['Data::Object::Name', 'Data_Object_Name'],
+  # ]
 
 =cut
 
@@ -1432,6 +1459,16 @@ my $subs = $test->standard;
 
 $subs->synopsis(fun($tryable) {
   ok my $result = $tryable->result;
+
+  $result
+});
+
+$subs->example(-1, 'all', 'method', fun($tryable) {
+  ok my $result = $tryable->result;
+  is_deeply $result, [
+    ['Data::Object::Space', 'Data_Object_Space'],
+    ['Data::Object::Name', 'Data_Object_Name'],
+  ];
 
   $result
 });

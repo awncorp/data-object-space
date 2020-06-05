@@ -14,6 +14,17 @@ use parent 'Data::Object::Name';
 
 my %has;
 
+method all($name, @args) {
+  my $result = [];
+
+  my $class = $self->class;
+  for my $package ($self->package, @{$self->inherits}) {
+    push @$result, [$package, $class->new($package)->$name(@args)];
+  }
+
+  return $result;
+}
+
 method append(@args) {
   my $class = $self->class;
 
