@@ -80,7 +80,9 @@ method call($func, @args) {
   my $next = $class->can($func);
 
   unless ($next) {
-    $next = sub { $class->$func(@args) } if $class->can('AUTOLOAD');
+    if ($class->can('AUTOLOAD')) {
+      $next = sub { no strict 'refs'; &{"${class}::${func}"}(@args) };
+    }
   }
 
   unless ($next) {
