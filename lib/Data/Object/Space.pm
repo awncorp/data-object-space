@@ -107,6 +107,18 @@ method call($func, @args) {
   @_ = @args; goto $next;
 }
 
+method chain(@steps) {
+  my $result = $self;
+
+  for my $step (@steps) {
+    my ($name, @args) = (ref($step) eq 'ARRAY') ? @$step : ($step);
+
+    $result = $result->$name(@args);
+  }
+
+  return $result;
+}
+
 method child(@args) {
 
   return $self->append(@args);

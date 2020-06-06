@@ -36,6 +36,7 @@ method: base
 method: bless
 method: build
 method: call
+method: chain
 method: child
 method: children
 method: cop
@@ -409,6 +410,72 @@ call(Any @args) : Any
   $space->call('start')
 
   # bless({}, 'Zoo')
+
+=cut
+
+=method chain
+
+The chain method chains one or more method calls and returns the result.
+
+=signature chain
+
+chain(Str | Tuple[Str, Any] @steps) : Any
+
+=example-1 chain
+
+  package Chu::Chu0;
+
+  sub import;
+
+  package main;
+
+  my $space = Data::Object::Space->new('Chu::Chu0');
+
+  $space->chain('bless');
+
+=example-2 chain
+
+  package Chu::Chu1;
+
+  sub import;
+
+  sub new {
+    bless pop;
+  }
+
+  sub frame {
+    [@_]
+  }
+
+  package main;
+
+  my $space = Data::Object::Space->new('Chu::Chu1');
+
+  $space->chain(['bless', {1..4}], 'frame');
+
+  # [ bless( { '1' => 2, '3' => 4 }, 'Chu::Chu1' ) ]
+
+=example-3 chain
+
+  package Chu::Chu2;
+
+  sub import;
+
+  sub new {
+    bless pop;
+  }
+
+  sub frame {
+    [@_]
+  }
+
+  package main;
+
+  my $space = Data::Object::Space->new('Chu::Chu2');
+
+  $space->chain('bless', ['frame', {1..4}]);
+
+  # [ bless( {}, 'Chu::Chu2' ), { '1' => 2, '3' => 4 } ]
 
 =cut
 
@@ -1599,6 +1666,27 @@ $subs->example(-1, 'call', 'method', fun($tryable) {
 $subs->example(-2, 'call', 'method', fun($tryable) {
   ok my $result = $tryable->result;
   ok $result->isa('Zoo');
+
+  $result
+});
+
+$subs->example(-1, 'chain', 'method', fun($tryable) {
+  ok my $result = $tryable->result;
+  ok $result->isa('Chu::Chu0');
+
+  $result
+});
+
+$subs->example(-2, 'chain', 'method', fun($tryable) {
+  ok my $result = $tryable->result;
+  is_deeply [ bless( { '1' => 2, '3' => 4 }, 'Chu::Chu1' ) ], $result;
+
+  $result
+});
+
+$subs->example(-3, 'chain', 'method', fun($tryable) {
+  ok my $result = $tryable->result;
+  is_deeply [ bless( {}, 'Chu::Chu2' ), { '1' => 2, '3' => 4 } ], $result;
 
   $result
 });
