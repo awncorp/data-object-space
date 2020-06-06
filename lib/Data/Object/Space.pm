@@ -330,6 +330,10 @@ method load() {
 
   return $class if $has{$class};
 
+  if ($class eq "main") {
+    return do { $has{$class} = 1; $class };
+  }
+
   my $failed = !$class || $class !~ /^\w(?:[\w:']*\w)?$/;
   my $loaded;
 
