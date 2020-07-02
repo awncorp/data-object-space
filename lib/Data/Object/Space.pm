@@ -461,6 +461,10 @@ method reload() {
 
   delete $INC{$path};
 
+  no strict 'refs';
+
+  @{"${class}::ISA"} = ();
+
   return $self->load;
 }
 
