@@ -452,6 +452,18 @@ method rebase(@args) {
   return $class->new($self->base)->prepend($path);
 }
 
+method reload() {
+  my $class = $self->package;
+
+  delete $has{$class};
+
+  my $path = $self->format('path', '%s.pm');
+
+  delete $INC{$path};
+
+  return $self->load;
+}
+
 method require($target) {
   $target = "'$target'" if -f $target;
 
