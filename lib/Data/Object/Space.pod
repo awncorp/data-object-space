@@ -397,6 +397,82 @@ and if successful returns the resulting value.
 
 =cut
 
+=head2 chain
+
+  chain(Str | Tuple[Str, Any] @steps) : Any
+
+The chain method chains one or more method calls and returns the result.
+
+=over 4
+
+=item chain example #1
+
+  package Chu::Chu0;
+
+  sub import;
+
+  package main;
+
+  my $space = Data::Object::Space->new('Chu::Chu0');
+
+  $space->chain('bless');
+
+=back
+
+=over 4
+
+=item chain example #2
+
+  package Chu::Chu1;
+
+  sub import;
+
+  sub new {
+    bless pop;
+  }
+
+  sub frame {
+    [@_]
+  }
+
+  package main;
+
+  my $space = Data::Object::Space->new('Chu::Chu1');
+
+  $space->chain(['bless', {1..4}], 'frame');
+
+  # [ bless( { '1' => 2, '3' => 4 }, 'Chu::Chu1' ) ]
+
+=back
+
+=over 4
+
+=item chain example #3
+
+  package Chu::Chu2;
+
+  sub import;
+
+  sub new {
+    bless pop;
+  }
+
+  sub frame {
+    [@_]
+  }
+
+  package main;
+
+  my $space = Data::Object::Space->new('Chu::Chu2');
+
+  $space->chain('bless', ['frame', {1..4}]);
+
+  # [ bless( {}, 'Chu::Chu2' ), { '1' => 2, '3' => 4 } ]
+
+=back
+
+=cut
+
 =head2 child
 
   child(Str $arg1) : Object
@@ -1146,6 +1222,54 @@ specified to the base of the current object's namespace.
 
 =cut
 
+=head2 reload
+
+  reload() : Str
+
+The reload method attempts to delete and reload the package namespace using the
+L</load> method. B<Note:> Reloading is additive and will overwrite existing
+symbols but does not remove symbols.
+
+=over 4
+
+=item reload example #1
+
+  package main;
+
+  use Data::Object::Space;
+
+  # Foo::Gen is generate with $VERSION as 0.01
+
+  my $space = Data::Object::Space->new('foo/gen');
+
+  $space->reload;
+
+  # Foo::Gen
+  # Foo::Gen->VERSION is 0.01
+
+=back
+
+=over 4
+
+=item reload example #2
+
+  package main;
+
+  use Data::Object::Space;
+
+  # Foo::Gen is regenerated with $VERSION as 0.02
+
+  my $space = Data::Object::Space->new('foo/gen');
+
+  $space->reload;
+
+  # Foo::Gen
+  # Foo::Gen->VERSION is 0.02
+
+=back
+
+=cut
+
 =head2 require
 
   require(Str $target) : Any
@@ -1181,7 +1305,7 @@ objects were derived.
 
   # given: synopsis
 
-  $space->root
+  $space->root;
 
   # Foo
 
